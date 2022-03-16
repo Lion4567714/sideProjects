@@ -1,26 +1,23 @@
 public class Life {
 
     public static final int GRID_SIZE = 32;
+    public static boolean grid[][];
 
     static Display display = new Display();
 
     public static void main(String[] args) {
-        Boolean grid[][] = new Boolean[GRID_SIZE][GRID_SIZE];
-        grid = initializeBooleanArray(grid);
+        grid = initializeGrid();
 
-        display.initialize(GRID_SIZE);
+        display.run();
         
-        // Customize initial grid here
-        grid[2][3] = true;
-        grid[3][3] = true;
-        grid[3][4] = true;
-        grid[5][5] = true;
-        grid[4][3] = true;
+        while (!Display.START_SIMULATION) {
+            Thread.yield();
+        }
 
         for (int i = 0; i < 100; i++) {
             grid = nextTurn(grid);
 
-            display.updateDisplay(grid);
+            display.updateDisplay(grid, i);
             try {
                 Thread.sleep(150);
             } catch (InterruptedException e) {
@@ -30,19 +27,21 @@ public class Life {
         }
     }
 
-    static Boolean[][] initializeBooleanArray(Boolean grid[][]) {
+    static boolean[][] initializeGrid() {
+        boolean newGrid[][] = new boolean[GRID_SIZE][GRID_SIZE];
+
         for (int i = 0; i < GRID_SIZE; i++) {
             for (int j = 0; j < GRID_SIZE; j++) {
-                grid[i][j] = false;
+                newGrid[i][j] = false;
             }
         }
 
-        return grid;
+        return newGrid;
     }
 
-    static Boolean[][] nextTurn(Boolean grid[][]) {
-        Boolean newGrid[][] = new Boolean[GRID_SIZE][GRID_SIZE];
-        newGrid = initializeBooleanArray(newGrid);
+    static boolean[][] nextTurn(boolean grid[][]) {
+        boolean newGrid[][] = new boolean[GRID_SIZE][GRID_SIZE];
+        newGrid = initializeGrid();
 
         for (int i = 0; i < GRID_SIZE; i++) {
             for (int j = 0; j < GRID_SIZE; j++) {
@@ -115,9 +114,9 @@ public class Life {
         return newGrid;
     }
 
-    static void printGrid(Boolean grid[][]) {
-        for (Boolean row[] : grid) {
-            for (Boolean cell : row) {
+    static void printGrid(boolean grid[][]) {
+        for (boolean row[] : grid) {
+            for (boolean cell : row) {
                 if (cell) {
                     System.out.print("X");
                 } else {

@@ -1,33 +1,93 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+import java.util.ArrayList;
 
-public class Display extends JFrame {
+public class Display extends JFrame implements Runnable {
     
-    JFrame frame;
-    JButton buttonGrid[][];
+    public static boolean START_SIMULATION = false;
 
-    public void initialize(int gridSize) {
+    JFrame frame;
+
+    JPanel hotbar;
+    JTextPane turnDisplay;
+    JButton startButton;
+
+    JPanel viewport;
+    JButton buttonGrid[][];
+    ArrayList<JButton> buttonList;
+
+    ActionListener actionListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == startButton) {
+                START_SIMULATION = true;
+            }
+
+            if (buttonList.contains(e.getSource())) {
+                for (JButton button : buttonList) {
+                    if (button == e.getSource()) {
+                        int x = buttonList.indexOf(button) % Life.GRID_SIZE;
+                        int y = buttonList.indexOf(button) / Life.GRID_SIZE;
+
+                        if (Life.grid[x][y]) {
+                            Life.grid[x][y] = false;    
+                            button.setBackground(Color.WHITE);
+                        } else {
+                            Life.grid[x][y] = true;
+                            button.setBackground(Color.BLACK);
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    @Override
+    public void run() {
         frame = new JFrame("Conway's Game of Life");
 
         Container content = frame.getContentPane();
-        content.setLayout(new GridLayout(gridSize, gridSize));
+        // content.setLayout(new GridLayout(Life.GRID_SIZE, Life.GRID_SIZE));
+        
+        // Top Panel
+        hotbar = new JPanel();
+        hotbar.setLayout(new FlowLayout());
 
-        buttonGrid = new JButton[gridSize][gridSize];
-        for (int i = 0; i < gridSize; i++) {
-            for (int j = 0; j < gridSize; j++) {
+        turnDisplay = new JTextPane();
+        turnDisplay.setText("Turn: 0");
+        hotbar.add(turnDisplay);
+        startButton = new JButton("Start Simulation");
+        startButton.addActionListener(actionListener);
+        hotbar.add(startButton);
+
+        // Bottom Panel
+        viewport = new JPanel();
+        viewport.setLayout(new GridLayout(Life.GRID_SIZE, Life.GRID_SIZE));
+
+        buttonGrid = new JButton[Life.GRID_SIZE][Life.GRID_SIZE];
+        buttonList = new ArrayList<JButton>();
+        for (int i = 0; i < Life.GRID_SIZE; i++) {
+            for (int j = 0; j < Life.GRID_SIZE; j++) {
                 buttonGrid[i][j] = new JButton();
+                buttonList.add(buttonGrid[i][j]);
                 buttonGrid[i][j].setBackground(Color.WHITE);
-                content.add(buttonGrid[i][j]);
+                buttonGrid[i][j].addActionListener(actionListener);
+                viewport.add(buttonGrid[i][j]);
             }
         }
 
-        frame.setSize(600, 600);
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, hotbar, viewport);
+        splitPane.setDividerLocation(50);
+        content.add(splitPane);
+
+        frame.setSize(600, 650);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
 
-    public void updateDisplay(Boolean boolGrid[][]) {
+    public void updateDisplay(boolean boolGrid[][], int turnNumber) {
         for (int i = 0; i < boolGrid.length; i++) {
             for (int j = 0; j < boolGrid[0].length; j++) {
                 if (boolGrid[i][j]) {
@@ -37,6 +97,8 @@ public class Display extends JFrame {
                 }
             }
         }
+
+        turnDisplay.setText("Turn: " + turnNumber);
     }
 
 }
