@@ -1,19 +1,32 @@
 public class Life {
 
-    public static final int GRID_SIZE = 7;
+    public static final int GRID_SIZE = 32;
+
+    static Display display = new Display();
 
     public static void main(String[] args) {
         Boolean grid[][] = new Boolean[GRID_SIZE][GRID_SIZE];
         grid = initializeBooleanArray(grid);
+
+        display.initialize(GRID_SIZE);
         
         // Customize initial grid here
         grid[2][3] = true;
         grid[3][3] = true;
+        grid[3][4] = true;
+        grid[5][5] = true;
         grid[4][3] = true;
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             grid = nextTurn(grid);
-            printGrid(grid);
+
+            display.updateDisplay(grid);
+            try {
+                Thread.sleep(150);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            //printGrid(grid);
         }
     }
 
