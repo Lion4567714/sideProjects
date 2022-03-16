@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Display extends JFrame implements Runnable {
     
@@ -12,6 +13,7 @@ public class Display extends JFrame implements Runnable {
     JPanel hotbar;
     JTextPane turnDisplay;
     JButton startButton;
+    JButton randomButton;
     JButton resetButton;
 
     JPanel viewport;
@@ -28,6 +30,20 @@ public class Display extends JFrame implements Runnable {
                 } else {
                     startButton.setText("Stop Simulation");
                     START_SIMULATION = true;
+                }
+            }
+
+            if (e.getSource() == randomButton) {
+                Random rand = new Random();
+
+                for (int i = 0; i < buttonList.size(); i++) {
+                    if (rand.nextInt(0, 2) == 1) {
+                        buttonList.get(i).setBackground(Color.BLACK);
+                        Life.grid[i / Life.GRID_SIZE][i % Life.GRID_SIZE] = true;
+                    } else {
+                        buttonList.get(i).setBackground(Color.WHITE);
+                        Life.grid[i / Life.GRID_SIZE][i % Life.GRID_SIZE] = false;
+                    }
                 }
             }
 
@@ -48,8 +64,8 @@ public class Display extends JFrame implements Runnable {
             if (buttonList.contains(e.getSource())) {
                 for (JButton button : buttonList) {
                     if (button == e.getSource()) {
-                        int x = buttonList.indexOf(button) % Life.GRID_SIZE;
-                        int y = buttonList.indexOf(button) / Life.GRID_SIZE;
+                        int x = buttonList.indexOf(button) / Life.GRID_SIZE;
+                        int y = buttonList.indexOf(button) % Life.GRID_SIZE;
 
                         if (Life.grid[x][y]) {
                             Life.grid[x][y] = false;    
@@ -81,6 +97,9 @@ public class Display extends JFrame implements Runnable {
         startButton = new JButton("Start Simulation");
         startButton.addActionListener(actionListener);
         hotbar.add(startButton);
+        randomButton = new JButton("Random");
+        randomButton.addActionListener(actionListener);
+        hotbar.add(randomButton);
         resetButton = new JButton("Reset Simulation");
         resetButton.addActionListener(actionListener);
         hotbar.add(resetButton);

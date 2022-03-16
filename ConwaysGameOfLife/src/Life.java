@@ -1,6 +1,6 @@
 public class Life {
 
-    public static final int GRID_SIZE = 48;
+    public static final int GRID_SIZE = 16;
     public static boolean grid[][];
     public static int turnNumber = 0;
 
@@ -11,14 +11,15 @@ public class Life {
 
         display.run();
 
-        for (turnNumber = 0; turnNumber < 10000; turnNumber++) {
+        while (true) {
             while (!Display.START_SIMULATION) {
                 Thread.yield();
             }
 
             grid = nextTurn(grid);
-
             display.updateDisplay(grid, turnNumber);
+            turnNumber++;
+
             try {
                 Thread.sleep(150);
             } catch (InterruptedException e) {
