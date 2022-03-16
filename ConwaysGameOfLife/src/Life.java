@@ -1,7 +1,8 @@
 public class Life {
 
-    public static final int GRID_SIZE = 32;
+    public static final int GRID_SIZE = 48;
     public static boolean grid[][];
+    public static int turnNumber = 0;
 
     static Display display = new Display();
 
@@ -9,21 +10,20 @@ public class Life {
         grid = initializeGrid();
 
         display.run();
-        
-        while (!Display.START_SIMULATION) {
-            Thread.yield();
-        }
 
-        for (int i = 0; i < 100; i++) {
+        for (turnNumber = 0; turnNumber < 10000; turnNumber++) {
+            while (!Display.START_SIMULATION) {
+                Thread.yield();
+            }
+
             grid = nextTurn(grid);
 
-            display.updateDisplay(grid, i);
+            display.updateDisplay(grid, turnNumber);
             try {
                 Thread.sleep(150);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            //printGrid(grid);
         }
     }
 
@@ -112,21 +112,5 @@ public class Life {
         }
 
         return newGrid;
-    }
-
-    static void printGrid(boolean grid[][]) {
-        for (boolean row[] : grid) {
-            for (boolean cell : row) {
-                if (cell) {
-                    System.out.print("X");
-                } else {
-                    System.out.print("O");
-                }
-            }
-
-            System.out.println();
-        }
-
-        System.out.println("-------");
     }
 }

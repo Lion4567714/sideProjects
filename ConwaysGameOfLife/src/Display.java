@@ -12,6 +12,7 @@ public class Display extends JFrame implements Runnable {
     JPanel hotbar;
     JTextPane turnDisplay;
     JButton startButton;
+    JButton resetButton;
 
     JPanel viewport;
     JButton buttonGrid[][];
@@ -21,7 +22,27 @@ public class Display extends JFrame implements Runnable {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == startButton) {
-                START_SIMULATION = true;
+                if (START_SIMULATION) {
+                    startButton.setText("Start Simulation");
+                    START_SIMULATION = false;
+                } else {
+                    startButton.setText("Stop Simulation");
+                    START_SIMULATION = true;
+                }
+            }
+
+            if (e.getSource() == resetButton) {
+                START_SIMULATION = false;
+
+                turnDisplay.setText("Turn: 0");
+                Life.turnNumber = 0;
+
+                startButton.setText("Start Simulation");
+
+                Life.grid = Life.initializeGrid();
+                for (JButton button : buttonList) {
+                    button.setBackground(Color.WHITE);
+                }
             }
 
             if (buttonList.contains(e.getSource())) {
@@ -60,6 +81,9 @@ public class Display extends JFrame implements Runnable {
         startButton = new JButton("Start Simulation");
         startButton.addActionListener(actionListener);
         hotbar.add(startButton);
+        resetButton = new JButton("Reset Simulation");
+        resetButton.addActionListener(actionListener);
+        hotbar.add(resetButton);
 
         // Bottom Panel
         viewport = new JPanel();
