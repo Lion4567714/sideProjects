@@ -11,7 +11,6 @@ public class Display extends JFrame implements Runnable {
     JFrame frame;
 
     JPanel hotbar;
-    JTextPane turnDisplay;
     JButton startButton;
     JButton randomButton;
     JButton resetButton;
@@ -35,14 +34,31 @@ public class Display extends JFrame implements Runnable {
 
             if (e.getSource() == randomButton) {
                 Random rand = new Random();
+                int x;
+                int y;
 
                 for (int i = 0; i < buttonList.size(); i++) {
+                    x = i / Life.GRID_SIZE;
+                    y = i % Life.GRID_SIZE;
+
                     if (rand.nextInt(0, 2) == 1) {
                         buttonList.get(i).setBackground(Color.BLACK);
-                        Life.grid[i / Life.GRID_SIZE][i % Life.GRID_SIZE] = true;
+                        
+                        if (!Life.grid[x][y]) {
+                            Life.population++;
+                            Life.stats.updateStatistics(Life.turnNumber, Life.population);
+                        }
+
+                        Life.grid[x][y] = true;
                     } else {
                         buttonList.get(i).setBackground(Color.WHITE);
-                        Life.grid[i / Life.GRID_SIZE][i % Life.GRID_SIZE] = false;
+
+                        if (Life.grid[x][y]) {
+                            Life.population--;
+                            Life.stats.updateStatistics(Life.turnNumber, Life.population);
+                        }
+
+                        Life.grid[x][y] = false;
                     }
                 }
             }
@@ -50,8 +66,9 @@ public class Display extends JFrame implements Runnable {
             if (e.getSource() == resetButton) {
                 START_SIMULATION = false;
 
-                turnDisplay.setText("Turn: 0");
                 Life.turnNumber = 0;
+                Life.population = 0;
+                Life.stats.updateStatistics(Life.turnNumber, Life.population);
 
                 startButton.setText("Start Simulation");
 
@@ -69,9 +86,13 @@ public class Display extends JFrame implements Runnable {
 
                         if (Life.grid[x][y]) {
                             Life.grid[x][y] = false;    
+                            Life.population--;
+                            Life.stats.updateStatistics(Life.turnNumber, Life.population);
                             button.setBackground(Color.WHITE);
                         } else {
                             Life.grid[x][y] = true;
+                            Life.population++;
+                            Life.stats.updateStatistics(Life.turnNumber, Life.population);
                             button.setBackground(Color.BLACK);
                         }
                     }
@@ -89,11 +110,7 @@ public class Display extends JFrame implements Runnable {
         
         // Top Panel
         hotbar = new JPanel();
-        hotbar.setLayout(new FlowLayout());
 
-        turnDisplay = new JTextPane();
-        turnDisplay.setText("Turn: 0");
-        hotbar.add(turnDisplay);
         startButton = new JButton("Start Simulation");
         startButton.addActionListener(actionListener);
         hotbar.add(startButton);
@@ -121,7 +138,7 @@ public class Display extends JFrame implements Runnable {
         }
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, hotbar, viewport);
-        splitPane.setDividerLocation(50);
+        splitPane.setDividerLocation(35);
         content.add(splitPane);
 
         frame.setSize(600, 650);
@@ -140,8 +157,6 @@ public class Display extends JFrame implements Runnable {
                 }
             }
         }
-
-        turnDisplay.setText("Turn: " + turnNumber);
     }
 
 }

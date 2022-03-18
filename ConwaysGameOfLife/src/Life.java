@@ -1,15 +1,18 @@
 public class Life {
 
-    public static final int GRID_SIZE = 16;
+    public static final int GRID_SIZE = 48;
     public static boolean grid[][];
     public static int turnNumber = 0;
+    public static int population = 0;
 
-    static Display display = new Display();
+    public static Display display = new Display();
+    public static StatisticsDisplay stats = new StatisticsDisplay();
 
     public static void main(String[] args) {
         grid = initializeGrid();
-
+        
         display.run();
+        stats.initialize(display.frame);
 
         while (true) {
             while (!Display.START_SIMULATION) {
@@ -19,9 +22,10 @@ public class Life {
             grid = nextTurn(grid);
             display.updateDisplay(grid, turnNumber);
             turnNumber++;
+            stats.updateStatistics(turnNumber, population);
 
             try {
-                Thread.sleep(150);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -103,10 +107,14 @@ public class Life {
                 if (grid[i][j]) {
                     if (neighborsCount == 2 || neighborsCount == 3) {
                         newGrid[i][j] = true;
+                    } else {
+                        newGrid[i][j] = false;
+                        population--;
                     }
                 } else {
                     if (neighborsCount == 3) {
                         newGrid[i][j] = true;
+                        population++;
                     }
                 }
             }
