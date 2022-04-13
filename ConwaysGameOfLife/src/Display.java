@@ -38,10 +38,10 @@ public class Display extends JFrame implements Runnable {
                 int y;
 
                 for (int i = 0; i < buttonList.size(); i++) {
-                    x = i / Life.GRID_SIZE;
-                    y = i % Life.GRID_SIZE;
+                    x = i / Life.gridSize;
+                    y = i % Life.gridSize;
 
-                    if (rand.nextInt(0, 2) == 1) {
+                    if (rand.nextInt(0, 3) == 0) {
                         buttonList.get(i).setBackground(Color.BLACK);
                         
                         if (!Life.grid[x][y]) {
@@ -81,8 +81,8 @@ public class Display extends JFrame implements Runnable {
             if (buttonList.contains(e.getSource())) {
                 for (JButton button : buttonList) {
                     if (button == e.getSource()) {
-                        int x = buttonList.indexOf(button) / Life.GRID_SIZE;
-                        int y = buttonList.indexOf(button) % Life.GRID_SIZE;
+                        int x = buttonList.indexOf(button) / Life.gridSize;
+                        int y = buttonList.indexOf(button) % Life.gridSize;
 
                         if (Life.grid[x][y]) {
                             Life.grid[x][y] = false;    
@@ -106,7 +106,7 @@ public class Display extends JFrame implements Runnable {
         frame = new JFrame("Conway's Game of Life");
 
         Container content = frame.getContentPane();
-        // content.setLayout(new GridLayout(Life.GRID_SIZE, Life.GRID_SIZE));
+        // content.setLayout(new GridLayout(Life.gridSize, Life.gridSize));
         
         // Top Panel
         hotbar = new JPanel();
@@ -123,12 +123,12 @@ public class Display extends JFrame implements Runnable {
 
         // Bottom Panel
         viewport = new JPanel();
-        viewport.setLayout(new GridLayout(Life.GRID_SIZE, Life.GRID_SIZE));
+        viewport.setLayout(new GridLayout(Life.gridSize, Life.gridSize));
 
-        buttonGrid = new JButton[Life.GRID_SIZE][Life.GRID_SIZE];
+        buttonGrid = new JButton[Life.gridSize][Life.gridSize];
         buttonList = new ArrayList<JButton>();
-        for (int i = 0; i < Life.GRID_SIZE; i++) {
-            for (int j = 0; j < Life.GRID_SIZE; j++) {
+        for (int i = 0; i < Life.gridSize; i++) {
+            for (int j = 0; j < Life.gridSize; j++) {
                 buttonGrid[i][j] = new JButton();
                 buttonList.add(buttonGrid[i][j]);
                 buttonGrid[i][j].setBackground(Color.WHITE);
