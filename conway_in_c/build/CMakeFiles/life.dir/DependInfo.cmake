@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/lion/sideProjects/conway_in_c/src/main.c" "/home/lion/sideProjects/conway_in_c/build/CMakeFiles/conway_c_edition.dir/src/main.c.o"
+  "/home/lion/sideProjects/conway_in_c/src/main.c" "/home/lion/sideProjects/conway_in_c/build/CMakeFiles/life.dir/src/main.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

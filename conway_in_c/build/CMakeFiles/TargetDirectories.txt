@@ -1,3 +1,3 @@
-/home/lion/sideProjects/conway_c_edition/build/CMakeFiles/rebuild_cache.dir
-/home/lion/sideProjects/conway_c_edition/build/CMakeFiles/conway_c_edition.dir
-/home/lion/sideProjects/conway_c_edition/build/CMakeFiles/edit_cache.dir
+/home/lion/sideProjects/conway_in_c/build/CMakeFiles/rebuild_cache.dir
+/home/lion/sideProjects/conway_in_c/build/CMakeFiles/life.dir
+/home/lion/sideProjects/conway_in_c/build/CMakeFiles/edit_cache.dir

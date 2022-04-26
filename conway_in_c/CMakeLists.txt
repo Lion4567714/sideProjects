@@ -27,7 +27,7 @@
 #
 
 # Define the project name
-project(conway_c_edition)
+project(life)
 
 # Set the cmake minimum version to 3.5.1
 cmake_minimum_required(VERSION 3.5.1)
